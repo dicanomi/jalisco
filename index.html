@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#658299"></rect><text x="50" y="63" font-family="Georgia, 'Times New Roman', serif" font-size="40" fill="#fafafa" text-anchor="middle">J</text></svg></template>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://db.onlinewebfonts.com/c/7706570de59028c29c169a0ab5a5daff?family=MuaraRough" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&amp;family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;family=Inter:wght@400;500;600;700&amp;family=Rock+Salt&amp;display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:#fafafa; scroll-behavior:smooth;}
+  body{ -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;}
+  select{font-family:inherit;}
+  ::selection{background:#658299;color:#fafafa;}
+  @keyframes revUp{ from{opacity:0; transform:translateY(45px);} to{opacity:1; transform:none;} }
+  @keyframes revZoom{ from{opacity:0; transform:translateY(45px) scale(0.955);} to{opacity:1; transform:none;} }
+  /* ---- IntersectionObserver-driven scroll reveals (reliable in shadow tree) ---- */
+  [data-reveal]{ opacity:0; transform:translateY(40px); transition:opacity .7s cubic-bezier(.16,.84,.44,1), transform .7s cubic-bezier(.16,.84,.44,1); will-change:opacity, transform; }
+  [data-reveal="zoom"]{ transform:translateY(40px) scale(0.955); }
+  [data-reveal].is-revealed{ opacity:1 !important; transform:none !important; }
+  /* ---- page-load entrance ---- */
+  @keyframes loadImg{ from{opacity:0; transform:scale(1.09);} to{opacity:1; transform:none;} }
+  @keyframes loadFadeUp{ from{opacity:0; transform:translateY(22px);} to{opacity:1; transform:none;} }
+  @keyframes loadRise{ from{transform:translateY(18px);} to{transform:none;} }
+  @keyframes loadFade{ from{opacity:0;} to{opacity:1;} }
+  .hero-rail a{ animation:loadFade 460ms ease-out both; }
+  .hero-rail a:nth-of-type(1){ animation-delay:300ms; }
+  .hero-rail a:nth-of-type(2){ animation-delay:390ms; }
+  .hero-rail a:nth-of-type(3){ animation-delay:480ms; }
+  .hero-rail a:nth-of-type(4){ animation-delay:570ms; }
+  /* ---- scroll-linked parallax (driven by JS in the logic class for reliability) ---- */
+  .hero-parallax{ will-change:transform; }
+  .agave-parallax{ will-change:transform; }
+  /* ---- nav active section pill ---- */
+  .vnav:hover .vnav-label, .vnav:focus-visible .vnav-label, .vnav[data-nav-active] .vnav-label{ background:#658299 !important; color:#ffffff !important; }
+  .vnav:focus-visible{ outline:2px solid #ffffff; outline-offset:2px; border-radius:999px; }
+  .nav-overlay a:active{ color:#658299 !important; }
+  .nav-overlay a:hover, .nav-overlay a:focus-visible{ color:#658299 !important; }
+  .nav-overlay a:focus-visible{ outline:2px solid #658299; outline-offset:4px; }
+  .nav-overlay button:focus-visible{ outline:2px solid #658299; outline-offset:4px; }
+  /* ---- menu overlay open/close ---- */
+  .nav-overlay{ opacity:0; visibility:hidden; transform:translateY(10px); transition:opacity 240ms ease-out, transform 240ms ease-out, visibility 0s linear 240ms; }
+  .nav-overlay[data-open="true"]{ opacity:1; visibility:visible; transform:none; transition:opacity 240ms ease-out, transform 240ms ease-out, visibility 0s; }
+  .nav-overlay a{ opacity:0; transform:translateY(8px); transition:opacity 260ms ease-out, transform 260ms ease-out, color 240ms ease; }
+  .nav-overlay[data-open="true"] a{ opacity:1; transform:none; }
+  .nav-overlay[data-open="true"] a:nth-of-type(1){ transition-delay:90ms; }
+  .nav-overlay[data-open="true"] a:nth-of-type(2){ transition-delay:160ms; }
+  .nav-overlay[data-open="true"] a:nth-of-type(3){ transition-delay:230ms; }
+  .nav-overlay a:focus-visible, .nav-overlay button:focus-visible{ outline:2px solid #fafafa; outline-offset:4px; color:var(--accent); }
+  @media (prefers-reduced-motion: reduce){
+    [data-reveal]{ animation:none !important; opacity:1 !important; transform:none !important; }
+    [data-load]{ animation:none !important; opacity:1 !important; }
+    .hero-parallax, .agave-parallax{ animation:none !important; transform:none !important; }
+    .hero-rail a{ animation:none !important; opacity:1 !important; }
+    .nav-overlay, .nav-overlay a{ transition-property:opacity, visibility !important; transition-duration:160ms !important; transform:none !important; }
+    html{ scroll-behavior:auto; }
+  }
+  /* ---- torn-paper divider utility (fill stays currentColor; color + height set here) ---- */
+  .torn-divider{ position:absolute; left:0; width:100%; line-height:0; pointer-events:none; color:var(--torn-color, #FAFAFA); opacity:var(--torn-opacity, 1); }
+  .torn-divider svg{ display:block; width:100%; height:100%; }
+  .torn-divider.is-bottom{ bottom:0; }
+  .torn-divider.is-top{ top:0; }
+  .torn-divider.flip-x{ transform:scaleX(-1); }
+  .torn-divider.flip-y{ transform:scaleY(-1); }
+  .torn-divider.flip-both{ transform:scale(-1,-1); }
+</style>
+</helmet>
+<div ref="{{ rootRef }}" data-name="Our Story" style="position:relative; width:100%; overflow-x:hidden; background:#fafafa; font-family:'Cormorant Garamond',ui-serif,Georgia,serif; color:#100d0e; --accent:#658299;">
+
+  <!-- ============ HERO ============ -->
+  <section data-screen-label="Hero" style="position:relative; width:100%; height:100vh; height:100dvh; min-height:620px; overflow:hidden; background:#15171a;">
+    <div aria-hidden="true" class="hero-parallax" style="position:absolute; inset:-48px 0;">
+      <div data-load="" style="position:absolute; inset:0; background:url('./assets/hero.webp') center 35%/cover no-repeat; animation:loadImg 720ms ease-out both; will-change:transform,opacity;"></div>
+    </div>
+    <div ref="{{ overlayRef }}" style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(8,10,12,0.55) 0%, rgba(8,10,12,0.15) 38%, rgba(8,10,12,0.55) 100%); opacity:0.55; pointer-events:none;"></div>
+
+    <!-- top bar -->
+    <div data-load="" style="position:absolute; top:0; left:0; right:0; z-index:6; display:flex; justify-content:flex-end; align-items:center; padding:clamp(22px,3vw,46px) clamp(20px,4vw,54px); animation:loadFadeUp 560ms ease-out both; animation-delay:160ms;">
+      <button onClick="{{ toggleNav }}" aria-label="Menu" style="display:flex; flex-direction:column; gap:6px; width:34px; padding:6px 4px; background:transparent; border:none; cursor:pointer; color:#fafafa; transition:color 200ms ease;" style-hover="color:#658299;">
+        <span style="display:block; height:1.6px; width:100%; background:currentColor;"></span>
+        <span style="display:block; height:1.6px; width:100%; background:currentColor;"></span>
+        <span style="display:block; height:1.6px; width:72%; background:currentColor;"></span>
+      </button>
+    </div>
+
+    <!-- left vertical rail -->
+    <nav ref="{{ railRef }}" class="hero-rail" style="position: absolute; left: clamp(18px,2.6vw,40px); top: 0; bottom: 0; z-index: 5; display: flex; flex-direction: column; justify-content: center; gap: 0px; align-items: center">
+      <a href="#story" class="vnav" style="writing-mode:vertical-rl; transform:rotate(180deg); cursor:pointer; padding:14px 13px; margin:-14px -13px; text-decoration:none;"><span class="vnav-label" style="font-family:'Inter',sans-serif; font-size:12px; font-weight:600; letter-spacing:0.26em; text-transform:uppercase; color:#fafafa; padding:15px 0.55em; border-radius:999px; transition:color 140ms ease-out, background-color 140ms ease-out;">Whitefish, MT</span></a>
+      <span style="width:1px; height:54px; background:rgba(250,250,250,0.35);"></span>
+      <a href="#story" class="vnav" style="writing-mode:vertical-rl; transform:rotate(180deg); cursor:pointer; padding:14px 13px; margin:-14px -13px; text-decoration:none;"><span class="vnav-label" style="font-family:'Inter',sans-serif; font-size:12px; font-weight:600; letter-spacing:0.26em; text-transform:uppercase; color:#fafafa; padding:15px 0.55em; border-radius:999px; transition:color 140ms ease-out, background-color 140ms ease-out;">Carlsbad, CA</span></a>
+      <span style="width:1px; height:54px; background:rgba(250,250,250,0.35);"></span>
+      <a href="#story" class="vnav" data-section-link="story" style="writing-mode:vertical-rl; transform:rotate(180deg); cursor:pointer; padding:14px 13px; margin:-14px -13px; text-decoration:none;"><span class="vnav-label" style="font-family:'Inter',sans-serif; font-size:12px; font-weight:600; letter-spacing:0.26em; text-transform:uppercase; color:#fafafa; padding:15px 0.55em; border-radius:999px; transition:color 140ms ease-out, background-color 140ms ease-out;">Our Story</span></a>
+      <span style="width:1px; height:54px; background:rgba(250,250,250,0.35);"></span>
+      <a href="#reserve" class="vnav" data-section-link="reserve" style="writing-mode:vertical-rl; transform:rotate(180deg); cursor:pointer; padding:14px 13px; margin:-14px -13px; text-decoration:none;"><span class="vnav-label" style="font-family:'Inter',sans-serif; font-size:12px; font-weight:600; letter-spacing:0.26em; text-transform:uppercase; color:#fafafa; padding:15px 0.55em; border-radius:999px; transition:color 140ms ease-out, background-color 140ms ease-out;">Menus</span></a>
+    </nav>
+
+    <!-- centered logo -->
+    <div data-load="" style="position:absolute; top:clamp(34px,7vw,82px); left:0; right:0; z-index:5; display:flex; justify-content:center; animation:loadFadeUp 620ms ease-out both; animation-delay:240ms;">
+      <img src="./assets/logo-white.svg" alt="Jalisco Cantina" style="width:clamp(230px,30vw,360px); height:auto;">
+    </div>
+
+    <!-- chef credit -->
+    <sc-if value="{{ showChef }}" hint-placeholder-val="{{ true }}">
+      <div data-load="" style="position:absolute; left:clamp(58px,9vw,150px); bottom:clamp(40px,8vw,96px); z-index:5; display:flex; flex-direction:column; animation:loadFadeUp 620ms ease-out both; animation-delay:460ms;">
+        <span style="font-family:'Rock Salt',cursive; font-size:clamp(15px,1.6vw,22px); color:#fafafa; transform:rotate(-4deg); margin-bottom:-2px; opacity:0.95;">Chef</span>
+        <span style="font-family: 'MuaraRough', 'Muara Rough'; font-weight: 400; font-size: clamp(26px,3.4vw,44px); letter-spacing: 0.05em; color: #fafafa; text-transform: uppercase; line-height: 1">Travis Rue</span>
+      </div>
+    </sc-if>
+
+    <!-- nav overlay (animated open / close) -->
+    <div class="nav-overlay" data-open="{{ navOpenAttr }}" aria-hidden="{{ navHiddenAttr }}" style="position:absolute; inset:0; z-index:8; background:rgba(10,12,14,0.96); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:30px;">
+      <button onClick="{{ toggleNav }}" aria-label="Close menu" style="position:absolute; top:34px; right:46px; width:34px; height:34px; background:transparent; border:none; color:#fafafa; font-size:30px; cursor:pointer; line-height:1; transition:color 200ms ease;" style-hover="color:#658299;" style-focus="color:#658299; outline:2px solid rgba(101,130,153,0.75); outline-offset:4px;">×</button>
+      <a onClick="{{ navClickStory }}" href="#story" style="font-family:'MuaraRough','Muara Rough',cursive; font-size:clamp(24px,4vw,40px); letter-spacing:0.06em; color:#fafafa; text-decoration:none;" style-hover="color:var(--accent);">Our Story</a>
+      <a onClick="{{ navClickReserve }}" href="#reserve" style="font-family:'MuaraRough','Muara Rough',cursive; font-size:clamp(24px,4vw,40px); letter-spacing:0.06em; color:#fafafa; text-decoration:none;" style-hover="color:var(--accent);">Menus</a>
+      <a onClick="{{ navClickReserve }}" href="#reserve" style="font-family:'MuaraRough','Muara Rough',cursive; font-size:clamp(24px,4vw,40px); letter-spacing:0.06em; color:#fafafa; text-decoration:none;" style-hover="color:var(--accent);">Reservations</a>
+      <div style="display:flex; gap:36px; margin-top:14px;">
+        <span style="font-family:'Inter',sans-serif; font-size:12px; letter-spacing:0.24em; color:var(--accent); text-transform:uppercase;">Whitefish, MT</span>
+        <span style="font-family:'Inter',sans-serif; font-size:12px; letter-spacing:0.24em; color:var(--accent); text-transform:uppercase;">Carlsbad, CA</span>
+      </div>
+    </div>
+
+    <!-- torn-paper divider: fafafa tears into the very bottom edge of the hero -->
+    <div class="torn-divider is-bottom" aria-hidden="true" style="z-index:4; height:clamp(32px, 3.4vw, 64px);">
+      <svg preserveAspectRatio="none" id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1920.7 50.5">
+      <polygon fill="currentColor" points="1915.8 10.9 1913.7 7.4 1911.6 5.7 1909.5 9.9 1907.4 8.2 1905.3 6.8 1903.2 9.9 1901.1 9.5 1899 7 1896.9 9.8 1894.8 4.7 1892.7 5.6 1890.6 5.2 1888.5 3.6 1886.4 8.5 1884.3 7.5 1882.2 6.9 1880.1 3.4 1878 4.9 1875.9 8.1 1873.8 4 1871.7 4.4 1869.6 6.5 1867.5 6.5 1865.4 7.2 1863.3 3.1 1861.2 7.9 1859.1 9.7 1857 5.8 1854.9 6.7 1852.8 6.8 1850.7 4.1 1848.6 7.6 1846.5 5.1 1844.4 4 1842.3 3.9 1840.2 4.4 1838.1 4.7 1836 8.8 1833.9 6.1 1831.8 10.2 1829.7 6.5 1827.6 7.1 1825.5 3.5 1823.4 7.9 1821.3 5 1819.2 9.6 1817.1 7.8 1815 3.4 1812.9 8.3 1810.8 8.3 1808.7 6.8 1806.6 4 1804.5 3.7 1802.4 6.7 1800.3 7.7 1798.2 9.1 1796.1 9.9 1794 5.1 1791.9 9.2 1789.8 5.6 1787.7 7.1 1785.6 9.4 1783.5 6.5 1781.4 9.4 1779.3 4.5 1777.2 4.6 1775.1 10.2 1773 6 1770.9 8.2 1768.8 7.4 1766.7 10.2 1764.6 7.4 1762.4 9.2 1760.4 11.1 1758.3 8.7 1756.1 9.4 1754 10.1 1751.9 5.6 1749.9 10.4 1747.7 8.2 1745.6 4.2 1743.5 8.9 1741.4 6.8 1739.3 7.8 1737.2 7.7 1735.1 10.2 1733 8.1 1730.9 11.5 1728.8 8.5 1726.7 11.7 1724.6 11.5 1722.5 8.9 1720.4 7 1718.3 9.6 1716.2 8.5 1714.1 10.8 1712 10.9 1709.9 11.7 1707.8 8.6 1705.7 12.3 1703.6 12.1 1701.5 5.6 1699.4 10.5 1697.3 7.2 1695.2 8.7 1693.1 10.6 1691 6.6 1688.9 9 1686.8 10.5 1684.7 10.4 1682.6 5.5 1680.5 8.7 1678.4 10.5 1676.3 8.3 1674.2 7.7 1672.1 6.7 1670 6.4 1667.9 7.5 1665.8 7.7 1663.7 12.5 1661.6 6.6 1659.5 7.6 1657.4 6.4 1655.3 7.9 1653.2 13.6 1651.1 10.9 1649 7.2 1646.9 7.4 1644.8 9.8 1642.7 11.6 1640.6 12.7 1638.5 12.2 1636.4 9.4 1634.3 11.1 1632.2 8.5 1630.1 10.2 1628 7.7 1625.9 13.8 1623.8 9.1 1621.7 11.8 1619.6 11.6 1617.5 10.5 1615.4 11.8 1613.3 8.2 1611.2 14.1 1609.1 13.9 1607 13 1604.9 9.6 1602.8 8.1 1600.7 12.2 1598.6 8.6 1596.5 14.5 1594.4 7.4 1592.3 8.8 1590.2 9.3 1588.1 10.7 1586 10 1583.9 8.7 1581.8 10.6 1579.7 10.9 1577.6 9.4 1575.5 8 1573.4 7.7 1571.3 9.7 1569.2 8.7 1567.1 10.6 1565 13.4 1562.9 12.2 1560.8 9.1 1558.7 11 1556.6 9.2 1554.5 11.8 1552.4 11.6 1550.3 9.5 1548.2 8.6 1546.1 10.6 1544 12.5 1541.9 11.6 1539.8 10 1537.7 8.3 1535.6 15.2 1533.5 11.8 1531.4 8.3 1529.3 11 1527.2 15.1 1525.1 13.2 1523 9.1 1520.9 11.6 1518.8 14.4 1516.7 9.4 1514.6 14 1512.5 9.2 1510.4 8.7 1508.3 10.8 1506.2 10.2 1504.1 11.6 1502 13.3 1499.9 12.5 1497.8 7.7 1495.7 12.3 1493.6 8.9 1491.5 9.3 1489.4 11.9 1487.3 7.1 1485.2 7.9 1483.1 11.5 1481 13.5 1478.9 7.4 1476.8 13.2 1474.7 8.7 1472.6 12.2 1470.5 8.4 1468.4 8.6 1466.3 8.7 1464.2 8 1462.1 7.9 1460 12.2 1457.9 10.9 1455.8 13.8 1453.7 9.3 1451.6 9.5 1449.5 12.9 1447.3 11.1 1445.3 11 1443.2 9.2 1441 6.8 1438.9 7.7 1436.9 10.7 1434.8 8.5 1432.6 12.3 1430.5 14 1428.4 10 1426.3 11.2 1424.2 8.9 1422.1 12.2 1420 10.1 1417.9 10.4 1415.8 9.9 1413.7 9.7 1411.6 10.7 1409.5 10.9 1407.4 12.6 1405.3 11.4 1403.2 9.3 1401.1 7.1 1399 12.3 1396.9 9.4 1394.8 12.3 1392.7 7.7 1390.6 8.7 1388.5 11.9 1386.4 9.2 1384.3 11 1382.2 9.1 1380.1 8.5 1378 9 1375.9 9.2 1373.8 8.2 1371.7 8.8 1369.6 8 1367.5 10.3 1365.4 10.3 1363.3 8.7 1361.2 13.8 1359.1 9.1 1357 8.2 1354.9 8.4 1352.8 14.8 1350.7 9.4 1348.6 9.1 1346.5 11.6 1344.4 11.7 1342.3 8.5 1340.2 13.9 1338.1 11.4 1336 9.2 1333.9 13.7 1331.8 13.1 1329.7 7.6 1327.6 7.2 1325.5 10.2 1323.4 12.2 1321.3 10.3 1319.2 13.2 1317.1 10.3 1315 10 1312.9 6.7 1310.8 6.4 1308.7 12.3 1306.6 9.2 1304.5 8.9 1302.4 13.5 1300.3 11.1 1298.2 13.3 1296.1 11 1294 11.8 1291.9 10.2 1289.8 8.2 1287.7 8.8 1285.6 12.6 1283.5 8.7 1281.4 12.6 1279.3 8.7 1277.2 8.7 1275.1 8.4 1273 7.8 1270.9 11.2 1268.8 13 1266.7 11.7 1264.6 8.2 1262.5 12 1260.4 11.7 1258.3 10.3 1256.2 9.7 1254.1 9.7 1252 12.3 1249.9 13.2 1247.8 8.9 1245.7 7.5 1243.6 13.8 1241.5 11.5 1239.4 14.1 1237.3 13.3 1235.2 14.7 1233.1 13.8 1231 13.8 1228.9 10.7 1226.8 14 1224.7 8.5 1222.6 11 1220.5 10.8 1218.4 9.3 1216.3 14.4 1214.2 7.4 1212.1 13.4 1210 7.9 1207.9 8.8 1205.8 10.3 1203.7 7.3 1201.6 7.9 1199.5 10.4 1197.4 7.3 1195.3 10.4 1193.2 7.3 1191.1 9.1 1189 11.6 1186.9 8.4 1184.8 11.1 1182.7 9.9 1180.6 10.4 1178.5 12.6 1176.4 12 1174.3 7.1 1172.2 10 1170.1 9.1 1168 13.5 1165.9 13.7 1163.8 7.3 1161.7 7.3 1159.6 12.6 1157.5 7.8 1155.4 11.6 1153.3 11.8 1151.2 11 1149.1 12 1147 7.9 1144.9 11.6 1142.8 11.1 1140.7 6.7 1138.6 13.1 1136.5 12.4 1134.4 6.1 1132.2 12 1130.2 9 1128.1 12.5 1125.9 10.6 1123.8 7.4 1121.8 12 1119.7 11.7 1117.5 9.4 1115.4 6.7 1113.4 10 1111.2 9.7 1109.1 6.9 1107 6.4 1104.9 12.5 1102.8 6.8 1100.7 9.7 1098.6 9.3 1096.5 5.4 1094.4 11 1092.3 10.3 1090.2 6.9 1088.1 9.6 1086 10.4 1083.9 11.1 1081.8 11.8 1079.7 5.7 1077.6 7.8 1075.5 5.1 1073.4 8 1071.3 8.9 1069.2 8.5 1067.1 7.9 1065 10.2 1062.9 10.9 1060.8 9.9 1058.7 8 1056.6 9.1 1054.5 10.3 1052.4 10.5 1050.3 7.2 1048.2 6.8 1046.1 5.6 1044 11.4 1041.9 5.8 1039.8 11.2 1037.7 7.3 1035.6 10.1 1033.5 9.9 1031.4 4.7 1029.3 8.2 1027.2 4.8 1025.1 7.5 1023 5 1020.9 4 1018.8 7 1016.7 5.7 1014.6 7.6 1012.5 4.6 1010.4 4.3 1008.3 9.6 1006.2 10.5 1004.1 4.2 1002 7 999.9 5 997.8 7.2 995.7 10.5 993.6 3.9 991.5 9.2 989.4 3.8 987.3 9.2 985.2 8.6 983.1 7.8 981 9.5 978.9 6.2 976.8 6.5 974.7 5.2 972.6 8.6 970.5 3.3 968.4 3.5 966.3 3.9 964.2 6.6 962.1 4.5 960 6.8 957.9 8.4 955.8 3.2 953.7 4.8 951.6 9.1 949.5 8.8 947.4 3.4 945.3 4 943.2 1.7 941.1 5.6 939 5.7 936.9 6.6 934.8 5.5 932.7 4.2 930.6 6 928.5 7.4 926.4 2.3 924.3 6.8 922.2 7.6 920.1 2.1 918 7.8 915.9 6.6 913.8 6.7 911.7 3.9 909.6 6.4 907.5 4.7 905.4 2 903.3 7.4 901.2 1.9 899.1 2.5 897 2 894.9 6.8 892.8 5.4 890.7 8.1 888.6 3.9 886.5 7.7 884.4 5 882.3 2.1 880.2 5.9 878.1 4.4 876 4 873.9 5.6 871.8 6.8 869.7 7.9 867.6 5.6 865.5 5.8 863.4 8 861.3 8.6 859.2 4.7 857.1 6.4 855 7.6 852.9 2.4 850.8 2.9 848.7 6.5 846.6 6.4 844.5 5.8 842.4 5.4 840.3 6.8 838.2 3.6 836.1 1.9 834 8.4 831.9 1.4 829.8 1.5 827.7 7.4 825.6 6 823.5 6.2 821.4 4.7 819.3 7.4 817.2 5 815.1 4.4 813 6.8 810.8 6.4 808.7 5.4 806.7 6.2 804.6 5.1 802.4 1.6 800.3 2.1 798.3 4.2 796.1 3.6 794 4.1 791.9 7.9 789.8 4.4 787.7 5.3 785.6 1.7 783.5 4.7 781.4 1.6 779.3 5.2 777.2 2.7 775.1 4.6 773 7 770.9 6.7 768.8 .5 766.7 4.4 764.6 1.5 762.5 1.9 760.4 3.9 758.3 3 756.2 3.9 754.1 5.8 752 .8 749.9 4.5 747.8 1.6 745.7 3.6 743.6 4.3 741.5 5.1 739.4 3.4 737.3 3.7 735.2 1.5 733.1 6 731 3.4 728.9 6.6 726.8 5.1 724.7 5.9 722.6 .6 720.5 4 718.4 2.4 716.3 5.8 714.2 .7 712.1 5.9 710 1.5 707.9 3.5 705.8 3.6 703.7 3.2 701.6 3 699.5 1.6 697.4 5.3 695.3 4.7 693.2 5.1 691.1 .7 689 2.5 686.9 5.2 684.8 3.3 682.7 3.5 680.6 .6 678.5 2.9 676.4 4.2 674.3 5.6 672.2 3.5 670.1 2.2 668 7.4 665.9 4.1 663.8 2.9 661.7 0 659.6 6.8 657.5 6.2 655.4 4.5 653.3 1.5 651.2 .1 649.1 6 647 2.3 644.9 1.5 642.8 4.9 640.7 .6 638.6 4.6 636.5 .9 634.4 6.2 632.3 7 630.2 6.4 628.1 3 626 6.9 623.9 5.2 621.8 3 619.7 7.6 617.6 7.2 615.5 6.6 613.4 5.3 611.3 6.1 609.2 3.6 607.1 6.8 605 7.8 602.9 3.6 600.8 5.5 598.7 4.6 596.6 3.9 594.5 2.3 592.4 4.4 590.3 6.7 588.2 4.6 586.1 6.5 584 3.5 581.9 5.1 579.8 3.5 577.7 4.8 575.6 5.1 573.5 4.6 571.4 3.1 569.3 7 567.2 3.7 565.1 7.2 563 7.4 560.9 8.4 558.8 4.4 556.7 7.4 554.6 3.7 552.5 7.6 550.4 1.5 548.3 6.4 546.2 5 544.1 4 542 5.1 539.9 5.4 537.8 8.5 535.7 8.6 533.6 4 531.5 4.7 529.4 5.4 527.3 6.5 525.2 8.3 523.1 6.7 521 2.9 518.9 8.2 516.8 2.5 514.7 5.5 512.6 9.4 510.5 8.3 508.4 6.8 506.3 2.4 504.2 8.9 502.1 5.6 500 5.4 497.9 3.4 495.7 6.9 493.7 5 491.6 9.1 489.5 5.7 487.3 3.8 485.2 5.3 483.2 4.6 481 6.8 478.9 3.4 476.8 7.1 474.7 8.1 472.6 6.6 470.5 4.9 468.4 7.8 466.3 9.9 464.2 4.7 462.1 8.2 460 5.9 457.9 9.1 455.8 5.1 453.7 6.7 451.6 6.7 449.5 7.7 447.4 6.6 445.3 6.7 443.2 10.2 441.1 8.8 439 7 436.9 10.3 434.8 7.8 432.7 6.2 430.6 6 428.5 6.4 426.4 10.2 424.3 7.8 422.2 10.2 420.1 7.7 418 4.9 415.9 11.4 413.8 10.9 411.7 11.3 409.6 9.4 407.5 5.8 405.4 11 403.3 6.7 401.2 4.3 399.1 8.6 397 9 394.9 8.7 392.8 6.8 390.7 7 388.6 10.1 386.5 9.5 384.4 8.6 382.3 7.5 380.2 5.9 378.1 4.4 376 7.8 373.9 7.6 371.8 7.2 369.7 9.5 367.6 10 365.5 10.9 363.4 11.4 361.3 9.8 359.2 10.5 357.1 7.4 355 6.1 352.9 4.8 350.8 9.5 348.7 6 346.6 9.6 344.5 9.1 342.4 9.9 340.3 10 338.2 8.2 336.1 9.9 334 8.3 331.9 11 329.8 8.8 327.7 8.3 325.6 10.8 323.5 10 321.4 11.1 319.3 10.2 317.2 5.6 315.1 9.2 313 4.9 310.9 9 308.8 8.4 306.7 8.8 304.6 6.5 302.5 12 300.4 7 298.3 9.1 296.2 9.5 294.1 9.2 292 10.8 289.9 5.3 287.8 7.2 285.7 5.4 283.6 5.9 281.5 7.3 279.4 9.8 277.3 7.5 275.2 10 273.1 11.4 271 5.3 268.9 6.2 266.8 10.4 264.7 10.1 262.6 8.5 260.5 10.2 258.4 11.4 256.3 10.6 254.2 11.1 252.1 6.2 250 10 247.9 10.8 245.8 5.7 243.7 6.1 241.6 8.8 239.5 11.2 237.4 4.1 235.3 3.9 233.2 9.5 231.1 4.4 229 7.2 226.9 3.6 224.8 5.4 222.7 10.3 220.6 8 218.5 9.3 216.4 4.7 214.3 6.2 212.2 6.9 210.1 5.1 208 5.9 205.9 9.4 203.8 8.1 201.7 8.1 199.6 6.4 197.5 6.1 195.4 6 193.3 6.1 191.2 4.5 189.1 4.5 187 6 184.9 3.7 182.8 4.6 180.6 6.5 178.6 5.8 176.5 3.7 174.4 2.8 172.2 7.7 170.2 5.4 168.1 7.9 165.9 7.5 163.8 6.8 161.7 6.4 159.6 4.7 157.5 6 155.4 3.6 153.3 3.8 151.2 8.5 149.1 7.2 147 2.3 144.9 5.3 142.8 8.8 140.7 2.7 138.6 6.7 136.5 6.1 134.4 3.2 132.3 6.5 130.2 4.8 128.1 6 126 5.2 123.9 3.4 121.8 8.2 119.7 5.4 117.6 5.6 115.5 2.8 113.4 3.4 111.3 5.7 109.2 3.6 107.1 5.3 105 3.9 102.9 3 100.8 9.7 98.7 7 96.6 7.9 94.5 2.9 92.4 8.6 90.3 4 88.2 2.6 86.1 5.2 84 8.6 81.9 8.9 79.8 5.7 77.7 4.3 75.6 6 73.5 3.7 71.4 6 69.3 5.6 67.2 6.4 65.1 1.6 63 2 60.9 4.7 58.8 5 56.7 6.6 54.6 6.6 52.5 .6 50.4 7.8 48.3 8 46.2 3.7 44.1 6.7 42 1.1 39.9 1 37.8 8.1 35.7 2.5 33.6 6.8 31.5 2.6 29.4 2.5 27.3 6.1 25.2 3.1 23.1 2.2 21 2.7 18.9 6.4 16.8 7.7 14.7 5.3 12.6 4.5 10.5 3.5 8.4 6.8 6.3 3.8 4.2 4.1 2.1 8.7 0 6 0 16 0 32 0 50.5 1920.7 50.5 1920.7 28.5 1920.7 16 1920.7 6.5 1915.8 10.9"></polygon>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============ STORY ============ -->
+  <section id="story" style="position:relative; z-index:1; margin-top:-2px; width:100%; background:#fafafa; padding:clamp(56px,8vw,104px) clamp(24px,8vw,120px) clamp(40px,6vw,72px);">
+    <div style="max-width:1200px; margin:0 auto;">
+      <h1 data-reveal="" style="margin: 0 0 clamp(34px,5vw,58px); font-family: 'MuaraRough', 'Muara Rough'; font-weight: 500; font-size: clamp(2.4rem,5.2vw,4.1rem); letter-spacing: 0.06em; color: var(--accent); text-transform: uppercase;">Our Story</h1>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:clamp(36px,5vw,72px);">
+        <div data-reveal="" style="display:flex; flex-direction:column; gap:1.1em;">
+          <p style="margin: 0; font-family: 'Cormorant Garamond',serif; font-weight: 400; font-size: clamp(1.55rem,2.1vw,2.05rem); line-height: 1.24; color: #100d0e">¡Bienvenido a Jalisco Cantina! Our name, “Jalisco,” combines two Nahuatl words (the language of the Aztecs) to mean “sandy place.” Jalisco is an area of central-coastal Mexico that is rich with picturesque landscapes, rolling hillsides and the magnificence of the blue agave plant.</p>
+          <p style="margin: 0; font-family: 'Cormorant Garamond',serif; font-weight: 400; font-size: clamp(1.55rem,2.1vw,2.05rem); line-height: 1.24; color: #100d0e">This region is the source for the tequila industry and home to the finest tequilas in the world. The Jalisco culture is also filled with warm, welcoming people who embrace fresh ingredients in their dishes.</p>
+        </div>
+        <div data-reveal="" data-reveal-delay="120" style="display:flex; flex-direction:column; gap:1.1em;">
+          <p style="margin: 0; font-family: 'Cormorant Garamond',serif; font-weight: 400; font-size: clamp(1.55rem,2.1vw,2.05rem); line-height: 1.24; color: #100d0e">This philosophy serves as inspiration for the cuisine at Jalisco Cantina. Our scratch kitchen offers creative and delicious fresh food choices that pair wonderfully with some of the finest tequila and handcrafted cocktails available.</p>
+          <p style="margin: 0; font-family: 'Cormorant Garamond',serif; font-weight: 400; font-size: clamp(1.55rem,2.1vw,2.05rem); line-height: 1.24; color: #100d0e">At Jalisco Cantina, you will enjoy our uniquely made dishes and specialty drinks which reflect a region and culture as vibrant as the Mexican sun. ¡Salud!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESERVE ============ -->
+  <section id="reserve" style="position:relative; width:100%; background:#fafafa; padding:clamp(30px,5vw,70px) clamp(24px,8vw,120px) clamp(70px,9vw,130px); overflow:hidden;">
+    <div style="max-width:1200px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:clamp(30px,5vw,70px); align-items:center;">
+
+      <!-- form -->
+      <div data-reveal="" style="display:flex; flex-direction:column; gap:18px; max-width:600px;">
+        <label style="position:relative; display:flex; align-items:center; gap:14px; border:1.5px solid var(--accent); border-radius:7px; padding:12px 18px; cursor:pointer; transition:box-shadow .25s ease, border-color .25s ease;" style-hover="box-shadow:inset 0 0 0 1px var(--accent);">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="flex:none;"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z" stroke="var(--accent)" stroke-width="1.6"></path><circle cx="12" cy="10" r="2.4" stroke="var(--accent)" stroke-width="1.6"></circle></svg>
+          <select onChange="{{ setLocation }}" style="appearance:none; -webkit-appearance:none; border:none; background:transparent; outline:none; flex:1; font-family:'Inter',sans-serif; font-size:clamp(15px,1.2vw,19px); color:var(--accent); cursor:pointer;">
+            <option selected="">Whitefish, Montana</option>
+            <option>Carlsbad, California</option>
+          </select>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex:none;"><path d="M5 9l7 7 7-7" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </label>
+
+        <div style="display:flex; flex-wrap:wrap; gap:18px;">
+          <label style="position:relative; flex:1 1 150px; display:flex; align-items:center; gap:11px; border:1.5px solid var(--accent); border-radius:7px; padding:12px 16px; cursor:pointer; transition:box-shadow .25s ease;" style-hover="box-shadow:inset 0 0 0 1px var(--accent);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="flex:none;"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="var(--accent)" stroke-width="1.6"></rect><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round"></path></svg>
+            <input type="date" onChange="{{ setDate }}" style="border:none; background:transparent; outline:none; flex:1; min-width:0; font-family:'Inter',sans-serif; font-size:clamp(14px,1.1vw,18px); color:var(--accent); cursor:pointer;">
+          </label>
+          <label style="position:relative; flex:1 1 150px; display:flex; align-items:center; gap:11px; border:1.5px solid var(--accent); border-radius:7px; padding:12px 16px; cursor:pointer; transition:box-shadow .25s ease;" style-hover="box-shadow:inset 0 0 0 1px var(--accent);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="flex:none;"><circle cx="12" cy="12" r="8.2" stroke="var(--accent)" stroke-width="1.6"></circle><path d="M12 7.5V12l3 2" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <select onChange="{{ setTime }}" style="appearance:none; -webkit-appearance:none; border:none; background:transparent; outline:none; flex:1; font-family:'Inter',sans-serif; font-size:clamp(14px,1.1vw,18px); color:var(--accent); cursor:pointer;">
+              <option>5:00 PM</option><option>5:30 PM</option><option>6:00 PM</option><option>6:30 PM</option><option selected="">7:00 PM</option><option>7:30 PM</option><option>8:00 PM</option><option>8:30 PM</option>
+            </select>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex:none;"><path d="M5 9l7 7 7-7" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </label>
+          <label style="position:relative; flex:1 1 150px; display:flex; align-items:center; gap:11px; border:1.5px solid var(--accent); border-radius:7px; padding:12px 16px; cursor:pointer; transition:box-shadow .25s ease;" style-hover="box-shadow:inset 0 0 0 1px var(--accent);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="flex:none;"><circle cx="9" cy="9.5" r="3" stroke="var(--accent)" stroke-width="1.6"></circle><circle cx="16" cy="10.5" r="2.4" stroke="var(--accent)" stroke-width="1.6"></circle><path d="M4 18c0-2.5 2.2-4 5-4s5 1.5 5 4M14.5 17.4c.2-1.8 1.7-2.9 3.7-2.9 1.6 0 2.8.8 2.8 2.4" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round"></path></svg>
+            <select onChange="{{ setPeople }}" style="appearance:none; -webkit-appearance:none; border:none; background:transparent; outline:none; flex:1; font-family:'Inter',sans-serif; font-size:clamp(14px,1.1vw,18px); color:var(--accent); cursor:pointer;">
+              <option>1 guest</option><option selected="">2 guests</option><option>3 guests</option><option>4 guests</option><option>5 guests</option><option>6 guests</option>
+            </select>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="flex:none;"><path d="M5 9l7 7 7-7" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </label>
+        </div>
+
+        <!-- find a table ticket -->
+        <div role="button" tabindex="0" style="margin-top:6px; cursor:pointer; align-self:flex-start; width:100%; transform-origin:left center; transition:transform .3s cubic-bezier(.16,.84,.44,1);" style-hover="transform:translateY(-3px) rotate(2deg);">
+          <div ref="{{ ticketBoxRef }}" style="position:relative; width:100%; max-width:560px; height:132px;">
+            <div ref="{{ ticketInnerRef }}" style="position:absolute; top:0; left:0; transform-origin:top left; color:#658299;">
+              <x-import component-from-global-scope="FindATable" from="./components/Components.bundle.js" hint-size="560px,142px"></x-import>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- agave illustration -->
+      <div data-reveal="zoom" data-reveal-delay="120" style="display:flex; justify-content:center;">
+        <img src="./agave-plant-mqh95i56.svg" alt="Blue agave" class="agave-parallax" style="width:min(100%,500px); height:auto;">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer data-screen-label="Footer" style="position:relative; width:100%; background:#E3E8EB; overflow:visible; padding:clamp(70px,6vw,120px) clamp(24px,8vw,120px) clamp(40px,5vw,64px);">
+
+    <!-- torn-paper transition into footer: #F7F7F7 paper tears up into the #FAFAFA section above -->
+    <div class="torn-divider" aria-hidden="true" style="top:0; left:0; width:100%; height:clamp(140px,12vw,240px); color:#E3E8EB; transform:translateY(-68%); pointer-events:none; z-index:1;">
+      <svg preserveAspectRatio="none" id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1920.7 119.6">
+      <defs>
+      </defs>
+      <rect fill="none" class="st0" x="0" width="1920.7" height="119.6"></rect>
+      <polygon fill="currentColor" class="st1" points="1915.8 80 1913.7 76.5 1911.6 74.8 1909.5 79 1907.4 77.4 1905.3 75.9 1903.2 79 1901.1 78.6 1899 76.1 1896.9 79 1894.8 73.8 1892.7 74.7 1890.6 74.4 1888.5 72.8 1886.4 77.7 1884.3 76.7 1882.2 76 1880.1 72.5 1878 74.1 1875.9 77.2 1873.8 73.1 1871.7 73.5 1869.6 75.6 1867.5 75.7 1865.4 76.4 1863.3 72.2 1861.2 77.1 1859.1 78.8 1857 74.9 1854.9 75.9 1852.8 75.9 1850.7 73.2 1848.6 76.8 1846.5 74.2 1844.4 73.1 1842.3 73.1 1840.2 73.6 1838.1 73.8 1836 77.9 1833.9 75.2 1831.8 79.4 1829.7 75.7 1827.6 76.3 1825.5 72.6 1823.4 77 1821.3 74.1 1819.2 78.7 1817.1 76.9 1815 72.6 1812.9 77.5 1810.8 77.4 1808.7 76 1806.6 73.2 1804.5 72.9 1802.4 75.9 1800.3 76.9 1798.2 78.3 1796.1 79.1 1794 74.2 1791.9 78.3 1789.8 74.8 1787.7 76.2 1785.6 78.6 1783.5 75.7 1781.4 78.5 1779.3 73.6 1777.2 73.7 1775.1 79.3 1773 75.1 1770.9 77.3 1768.8 76.5 1766.7 79.3 1764.6 76.6 1762.4 78.3 1760.4 80.2 1758.3 77.8 1756.1 78.5 1754 79.2 1751.9 74.7 1749.9 79.6 1747.7 77.3 1745.6 73.3 1743.5 78.1 1741.4 75.9 1739.3 76.9 1737.2 76.8 1735.1 79.3 1733 77.2 1730.9 80.7 1728.8 77.6 1726.7 80.9 1724.6 80.6 1722.5 78 1720.4 76.1 1718.3 78.8 1716.2 77.6 1714.1 79.9 1712 80 1709.9 80.8 1707.8 77.7 1705.7 81.4 1703.6 81.2 1701.5 74.7 1699.4 79.6 1697.3 76.4 1695.2 77.8 1693.1 79.7 1691 75.7 1688.9 78.1 1686.8 79.6 1684.7 79.5 1682.6 74.6 1680.5 77.9 1678.4 79.6 1676.3 77.4 1674.2 76.8 1672.1 75.9 1670 75.5 1667.9 76.6 1665.8 76.9 1663.7 81.7 1661.6 75.7 1659.5 76.7 1657.4 75.5 1655.3 77.1 1653.2 82.7 1651.1 80 1649 76.4 1646.9 76.5 1644.8 79 1642.7 80.8 1640.6 81.9 1638.5 81.4 1636.4 78.5 1634.3 80.3 1632.2 77.6 1630.1 79.3 1628 76.8 1625.9 82.9 1623.8 78.3 1621.7 80.9 1619.6 80.8 1617.5 79.7 1615.4 80.9 1613.3 77.3 1611.2 83.2 1609.1 83.1 1607 82.2 1604.9 78.7 1602.8 77.3 1600.7 81.3 1598.6 77.7 1596.5 83.7 1594.4 76.5 1592.3 77.9 1590.2 78.5 1588.1 79.8 1586 79.1 1583.9 77.8 1581.8 79.7 1579.7 80.1 1577.6 78.5 1575.5 77.1 1573.4 76.9 1571.3 78.8 1569.2 77.9 1567.1 79.7 1565 82.5 1562.9 81.3 1560.8 78.2 1558.7 80.1 1556.6 78.3 1554.5 80.9 1552.4 80.7 1550.3 78.6 1548.2 77.7 1546.1 79.8 1544 81.7 1541.9 80.7 1539.8 79.2 1537.7 77.5 1535.6 84.3 1533.5 80.9 1531.4 77.4 1529.3 80.1 1527.2 84.2 1525.1 82.4 1523 78.2 1520.9 80.7 1518.8 83.6 1516.7 78.6 1514.6 83.1 1512.5 78.3 1510.4 77.8 1508.3 80 1506.2 79.3 1504.1 80.8 1502 82.4 1499.9 81.7 1497.8 76.8 1495.7 81.4 1493.6 78 1491.5 78.4 1489.4 81 1487.3 76.2 1485.2 77 1483.1 80.7 1481 82.6 1478.9 76.6 1476.8 82.3 1474.7 77.8 1472.6 81.3 1470.5 77.5 1468.4 77.7 1466.3 77.8 1464.2 77.1 1462.1 77 1460 81.4 1457.9 80 1455.8 82.9 1453.7 78.4 1451.6 78.6 1449.5 82 1447.3 80.2 1445.3 80.1 1443.2 78.3 1441 76 1438.9 76.8 1436.9 79.8 1434.8 77.7 1432.6 81.4 1430.5 83.2 1428.4 79.1 1426.3 80.4 1424.2 78.1 1422.1 81.3 1420 79.3 1417.9 79.5 1415.8 79 1413.7 78.8 1411.6 79.9 1409.5 80.1 1407.4 81.7 1405.3 80.5 1403.2 78.4 1401.1 76.3 1399 81.4 1396.9 78.5 1394.8 81.5 1392.7 76.8 1390.6 77.8 1388.5 81.1 1386.4 78.4 1384.3 80.2 1382.2 78.2 1380.1 77.6 1378 78.1 1375.9 78.3 1373.8 77.3 1371.7 77.9 1369.6 77.1 1367.5 79.4 1365.4 79.5 1363.3 77.8 1361.2 83 1359.1 78.2 1357 77.3 1354.9 77.6 1352.8 84 1350.7 78.5 1348.6 78.2 1346.5 80.7 1344.4 80.8 1342.3 77.6 1340.2 83.1 1338.1 80.5 1336 78.3 1333.9 82.8 1331.8 82.2 1329.7 76.8 1327.6 76.4 1325.5 79.4 1323.4 81.3 1321.3 79.4 1319.2 82.4 1317.1 79.4 1315 79.1 1312.9 75.9 1310.8 75.5 1308.7 81.4 1306.6 78.3 1304.5 78 1302.4 82.7 1300.3 80.2 1298.2 82.4 1296.1 80.1 1294 80.9 1291.9 79.3 1289.8 77.3 1287.7 77.9 1285.6 81.7 1283.5 77.9 1281.4 81.8 1279.3 77.8 1277.2 77.8 1275.1 77.5 1273 76.9 1270.9 80.3 1268.8 82.1 1266.7 80.8 1264.6 77.3 1262.5 81.2 1260.4 80.9 1258.3 79.5 1256.2 78.9 1254.1 78.8 1252 81.5 1249.9 82.3 1247.8 78.1 1245.7 76.7 1243.6 82.9 1241.5 80.7 1239.4 83.3 1237.3 82.4 1235.2 83.9 1233.1 82.9 1231 82.9 1228.9 79.8 1226.8 83.1 1224.7 77.6 1222.6 80.1 1220.5 79.9 1218.4 78.4 1216.3 83.5 1214.2 76.5 1212.1 82.5 1210 77 1207.9 77.9 1205.8 79.4 1203.7 76.5 1201.6 77 1199.5 79.5 1197.4 76.4 1195.3 79.6 1193.2 76.4 1191.1 78.2 1189 80.7 1186.9 77.6 1184.8 80.2 1182.7 79 1180.6 79.5 1178.5 81.8 1176.4 81.2 1174.3 76.2 1172.2 79.1 1170.1 78.2 1168 82.6 1165.9 82.8 1163.8 76.5 1161.7 76.5 1159.6 81.7 1157.5 77 1155.4 80.7 1153.3 80.9 1151.2 80.1 1149.1 81.2 1147 77.1 1144.9 80.7 1142.8 80.3 1140.7 75.8 1138.6 82.2 1136.5 81.5 1134.4 75.2 1132.2 81.1 1130.2 78.2 1128.1 81.6 1125.9 79.8 1123.8 76.5 1121.8 81.2 1119.7 80.8 1117.5 78.6 1115.4 75.8 1113.4 79.1 1111.2 78.8 1109.1 76 1107 75.6 1104.9 81.7 1102.8 75.9 1100.7 78.8 1098.6 78.4 1096.5 74.5 1094.4 80.2 1092.3 79.4 1090.2 76 1088.1 78.7 1086 79.6 1083.9 80.2 1081.8 80.9 1079.7 74.8 1077.6 76.9 1075.5 74.2 1073.4 77.1 1071.3 78 1069.2 77.7 1067.1 77 1065 79.3 1062.9 80.1 1060.8 79 1058.7 77.2 1056.6 78.2 1054.5 79.5 1052.4 79.6 1050.3 76.4 1048.2 75.9 1046.1 74.7 1044 80.5 1041.9 74.9 1039.8 80.4 1037.7 76.4 1035.6 79.2 1033.5 79 1031.4 73.8 1029.3 77.3 1027.2 74 1025.1 76.6 1023 74.1 1020.9 73.1 1018.8 76.2 1016.7 74.9 1014.6 76.8 1012.5 73.7 1010.4 73.5 1008.3 78.8 1006.2 79.7 1004.1 73.3 1002 76.1 999.9 74.2 997.8 76.3 995.7 79.6 993.6 73 991.5 78.3 989.4 72.9 987.3 78.3 985.2 77.8 983.1 76.9 981 78.6 978.9 75.3 976.8 75.6 974.7 74.3 972.6 77.7 970.5 72.4 968.4 72.7 966.3 73.1 964.2 75.8 962.1 73.6 960 75.9 957.9 77.5 955.8 72.3 953.7 73.9 951.6 78.2 949.5 77.9 947.4 72.5 945.3 73.2 943.2 70.8 941.1 74.7 939 74.9 936.9 75.8 934.8 74.6 932.7 73.3 930.6 75.2 928.5 76.5 926.4 71.5 924.3 75.9 922.2 76.8 920.1 71.2 918 76.9 915.9 75.8 913.8 75.8 911.7 73.1 909.6 75.5 907.5 73.8 905.4 71.2 903.3 76.6 901.2 71 899.1 71.6 897 71.1 894.9 76 892.8 74.5 890.7 77.2 888.6 73 886.5 76.8 884.4 74.1 882.3 71.2 880.2 75 878.1 73.5 876 73.1 873.9 74.7 871.8 76 869.7 77 867.6 74.7 865.5 74.9 863.4 77.1 861.3 77.8 859.2 73.8 857.1 75.6 855 76.7 852.9 71.6 850.8 72 848.7 75.7 846.6 75.5 844.5 74.9 842.4 74.5 840.3 75.9 838.2 72.7 836.1 71 834 77.5 831.9 70.6 829.8 70.6 827.7 76.5 825.6 75.2 823.5 75.3 821.4 73.9 819.3 76.5 817.2 74.1 815.1 73.5 813 75.9 810.8 75.6 808.7 74.5 806.7 75.3 804.6 74.3 802.4 70.7 800.3 71.2 798.3 73.3 796.1 72.7 794 73.2 791.9 77 789.8 73.5 787.7 74.4 785.6 70.8 783.5 73.9 781.4 70.7 779.3 74.3 777.2 71.8 775.1 73.7 773 76.2 770.9 75.8 768.8 69.7 766.7 73.5 764.6 70.7 762.5 71 760.4 73 758.3 72.1 756.2 73 754.1 75 752 69.9 749.9 73.6 747.8 70.8 745.7 72.8 743.6 73.4 741.5 74.3 739.4 72.5 737.3 72.9 735.2 70.6 733.1 75.1 731 72.5 728.9 75.7 726.8 74.2 724.7 75 722.6 69.8 720.5 73.1 718.4 71.5 716.3 74.9 714.2 69.8 712.1 75 710 70.6 707.9 72.7 705.8 72.7 703.7 72.3 701.6 72.1 699.5 70.7 697.4 74.4 695.3 73.8 693.2 74.2 691.1 69.8 689 71.6 686.9 74.4 684.8 72.5 682.7 72.7 680.6 69.7 678.5 72.1 676.4 73.4 674.3 74.8 672.2 72.6 670.1 71.4 668 76.5 665.9 73.3 663.8 72.1 661.7 69.1 659.6 76 657.5 75.4 655.4 73.6 653.3 70.6 651.2 69.3 649.1 75.2 647 71.5 644.9 70.7 642.8 74 640.7 69.7 638.6 73.7 636.5 70.1 634.4 75.3 632.3 76.1 630.2 75.6 628.1 72.2 626 76.1 623.9 74.4 621.8 72.2 619.7 76.7 617.6 76.4 615.5 75.7 613.4 74.5 611.3 75.2 609.2 72.7 607.1 75.9 605 76.9 602.9 72.7 600.8 74.6 598.7 73.7 596.6 73 594.5 71.4 592.4 73.5 590.3 75.9 588.2 73.7 586.1 75.7 584 72.6 581.9 74.2 579.8 72.7 577.7 74 575.6 74.2 573.5 73.7 571.4 72.2 569.3 76.2 567.2 72.8 565.1 76.3 563 76.5 560.9 77.5 558.8 73.5 556.7 76.6 554.6 72.8 552.5 76.8 550.4 70.6 548.3 75.5 546.2 74.2 544.1 73.1 542 74.2 539.9 74.6 537.8 77.6 535.7 77.7 533.6 73.2 531.5 73.8 529.4 74.5 527.3 75.6 525.2 77.4 523.1 75.8 521 72.1 518.9 77.3 516.8 71.7 514.7 74.6 512.6 78.6 510.5 77.4 508.4 76 506.3 71.5 504.2 78 502.1 74.7 500 74.5 497.9 72.5 495.7 76 493.7 74.1 491.6 78.3 489.5 74.8 487.3 72.9 485.2 74.5 483.2 73.8 481 76 478.9 72.6 476.8 76.2 474.7 77.3 472.6 75.7 470.5 74 468.4 76.9 466.3 79 464.2 73.8 462.1 77.3 460 75 457.9 78.2 455.8 74.2 453.7 75.8 451.6 75.8 449.5 76.8 447.4 75.8 445.3 75.8 443.2 79.3 441.1 77.9 439 76.1 436.9 79.4 434.8 77 432.7 75.3 430.6 75.1 428.5 75.6 426.4 79.3 424.3 76.9 422.2 79.3 420.1 76.8 418 74.1 415.9 80.5 413.8 80 411.7 80.4 409.6 78.5 407.5 74.9 405.4 80.2 403.3 75.8 401.2 73.5 399.1 77.8 397 78.1 394.9 77.9 392.8 75.9 390.7 76.2 388.6 79.2 386.5 78.7 384.4 77.8 382.3 76.6 380.2 75 378.1 73.6 376 77 373.9 76.8 371.8 76.3 369.7 78.6 367.6 79.1 365.5 80.1 363.4 80.5 361.3 79 359.2 79.7 357.1 76.5 355 75.2 352.9 73.9 350.8 78.6 348.7 75.2 346.6 78.7 344.5 78.2 342.4 79 340.3 79.2 338.2 77.3 336.1 79.1 334 77.4 331.9 80.2 329.8 78 327.7 77.4 325.6 79.9 323.5 79.2 321.4 80.2 319.3 79.3 317.2 74.7 315.1 78.4 313 74 310.9 78.1 308.8 77.6 306.7 77.9 304.6 75.6 302.5 81.2 300.4 76.1 298.3 78.2 296.2 78.7 294.1 78.3 292 79.9 289.9 74.5 287.8 76.3 285.7 74.6 283.6 75 281.5 76.5 279.4 79 277.3 76.6 275.2 79.1 273.1 80.6 271 74.5 268.9 75.3 266.8 79.5 264.7 79.2 262.6 77.7 260.5 79.4 258.4 80.6 256.3 79.8 254.2 80.2 252.1 75.3 250 79.2 247.9 80 245.8 74.8 243.7 75.2 241.6 77.9 239.5 80.3 237.4 73.2 235.3 73.1 233.2 78.6 231.1 73.5 229 76.4 226.9 72.7 224.8 74.6 222.7 79.4 220.6 77.1 218.5 78.4 216.4 73.8 214.3 75.3 212.2 76 210.1 74.3 208 75 205.9 78.6 203.8 77.2 201.7 77.2 199.6 75.5 197.5 75.3 195.4 75.1 193.3 75.3 191.2 73.7 189.1 73.6 187 75.2 184.9 72.8 182.8 73.7 180.6 75.6 178.6 74.9 176.5 72.8 174.4 72 172.2 76.8 170.2 74.5 168.1 77 165.9 76.7 163.8 75.9 161.7 75.6 159.6 73.8 157.5 75.1 155.4 72.7 153.3 72.9 151.2 77.6 149.1 76.3 147 71.5 144.9 74.5 142.8 77.9 140.7 71.9 138.6 75.8 136.5 75.2 134.4 72.3 132.3 75.7 130.2 73.9 128.1 75.1 126 74.3 123.9 72.5 121.8 77.3 119.7 74.5 117.6 74.7 115.5 72 113.4 72.6 111.3 74.8 109.2 72.7 107.1 74.4 105 73.1 102.9 72.2 100.8 78.8 98.7 76.1 96.6 77 94.5 72.1 92.4 77.7 90.3 73.2 88.2 71.8 86.1 74.3 84 77.7 81.9 78 79.8 74.9 77.7 73.4 75.6 75.1 73.5 72.8 71.4 75.2 69.3 74.8 67.2 75.5 65.1 70.8 63 71.1 60.9 73.8 58.8 74.1 56.7 75.7 54.6 75.7 52.5 69.7 50.4 76.9 48.3 77.2 46.2 72.8 44.1 75.8 42 70.2 39.9 70.1 37.8 77.2 35.7 71.6 33.6 76 31.5 71.8 29.4 71.7 27.3 75.2 25.2 72.3 23.1 71.3 21 71.8 18.9 75.6 16.8 76.8 14.7 74.4 12.6 73.7 10.5 72.6 8.4 76 6.3 72.9 4.2 73.3 2.1 77.8 0 75.2 0 85.1 0 101.1 0 119.6 1920.7 119.6 1920.7 97.6 1920.7 85.1 1920.7 75.6 1915.8 80"></polygon>
+      </svg>
+    </div>
+
+    <div data-reveal="" style="position:relative; z-index:1; max-width:1200px; margin:0 auto; display:flex; flex-wrap:wrap; gap:clamp(36px,5vw,72px); justify-content:space-between; align-items:flex-start;">
+      <!-- grouped nav columns -->
+      <div style="display:flex; flex-wrap:wrap; gap:clamp(46px,6vw,96px);">
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <a href="#story" style="font-family: 'MuaraRough', 'Muara Rough'; font-size: 18px; font-weight: 400; letter-spacing: 1px; text-transform: uppercase; color: #100d0e; text-decoration: none; transition: opacity 200ms ease; cursor: pointer" style-hover="opacity:0.6;" style-focus="opacity:0.6;">Whitefish, MT</a>
+        <a href="#story" style="font-family: 'MuaraRough', 'Muara Rough'; font-size: 18px; font-weight: 400; letter-spacing: 1px; text-transform: uppercase; color: #100d0e; text-decoration: none; transition: opacity 200ms ease; cursor: pointer" style-hover="opacity:0.6;" style-focus="opacity:0.6;">Carlsbad, CA</a>
+        </div>
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <a href="#story" style="font-family: 'MuaraRough', 'Muara Rough'; font-size: 18px; font-weight: 400; letter-spacing: 1px; text-transform: uppercase; color: #100d0e; text-decoration: none; transition: opacity 200ms ease; cursor: pointer" style-hover="opacity:0.6;" style-focus="opacity:0.6;">Our Story</a>
+        <a href="#story" style="font-family: 'MuaraRough', 'Muara Rough'; font-size: 18px; font-weight: 400; letter-spacing: 1px; text-transform: uppercase; color: #100d0e; text-decoration: none; transition: opacity 200ms ease; cursor: pointer" style-hover="opacity:0.6;" style-focus="opacity:0.6;">Press</a>
+        </div>
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <a href="#story" style="font-family: 'MuaraRough', 'Muara Rough'; font-size: 18px; font-weight: 400; letter-spacing: 1px; text-transform: uppercase; color: #100d0e; text-decoration: none; transition: opacity 200ms ease; cursor: pointer" style-hover="opacity:0.6;" style-focus="opacity:0.6;">Facebook</a>
+        <a href="#story" style="font-family: 'MuaraRough', 'Muara Rough'; font-size: 18px; font-weight: 400; letter-spacing: 1px; text-transform: uppercase; color: #100d0e; text-decoration: none; transition: opacity 200ms ease; cursor: pointer" style-hover="opacity:0.6;" style-focus="opacity:0.6;">Instagram</a>
+        </div>
+      </div>
+      <!-- brand blurb, right of the link columns; flexible for scaling -->
+      <p style="margin:0; flex:1 1 280px; max-width:460px; min-width:240px; font-family:'Cormorant Garamond',serif; font-weight:400; font-size:clamp(1.05rem,1.35vw,1.35rem); line-height:1.55; letter-spacing:0.3px; color:#100d0e;">Jalisco Cantina’s scratch kitchen offers creative and delicious fresh food choices that pair wonderfully with some of the finest tequila and handcrafted cocktails available.</p>
+    </div>
+
+    <!-- bottom: logo + blurb (left), agency credit (right) -->
+    <div style="position:relative; z-index:1; max-width:1200px; margin:clamp(58px,8vw,112px) auto 0; display:flex; flex-wrap:wrap; gap:clamp(28px,4vw,56px); justify-content:space-between; align-items:flex-end;">
+      <img src="./assets/logo-black.svg" alt="Jalisco Cantina" style="width:clamp(200px,26vw,320px); height:auto;">
+      <div style="font-family:'Cormorant Garamond',serif; font-size:clamp(0.92rem,1vw,1.05rem); color:#3f4143;">
+        <a href="trackerandscout.com" style="color: #000000; text-transform: none; text-decoration:none;" style-hover="opacity:0.6;" style-focus="opacity:0.6;">Agency Tracker+Scout</a>
+      </div>
+    </div>
+
+    <!-- copyright + legal: stacked, bottom-left -->
+    <div style="position:relative; z-index:1; max-width:1200px; margin:clamp(44px,5vw,72px) auto 0; display:flex; flex-direction:column; align-items:flex-start; gap:10px; font-family:'Cormorant Garamond',serif; font-size:clamp(0.92rem,1vw,1.05rem); color:#3f4143;">
+      <span style="text-transform: none">© 2026 Jalisco Cantina. All rights reserved.</span>
+      <div style="display:flex; flex-wrap:wrap; gap:8px 26px; text-transform:uppercase;">
+        <a href="#story" style="color: #3f4143; text-decoration: none; transition: opacity 200ms ease; cursor: pointer; text-transform: none" style-hover="opacity:0.6;" style-focus="opacity:0.6;">Terms of Service</a>
+        <a href="#story" style="color: #3f4143; text-decoration: none; transition: opacity 200ms ease; cursor: pointer; text-transform: none" style-hover="opacity:0.6;" style-focus="opacity:0.6;">Privacy Policy</a>
+        <a href="#story" style="color: #3f4143; text-decoration: none; transition: opacity 200ms ease; cursor: pointer; text-transform: none" style-hover="opacity:0.6;" style-focus="opacity:0.6;">Accessibility Statement</a>
+      </div>
+    </div>
+
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1100},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#658299&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;heroOverlay&quot;:{&quot;editor&quot;:&quot;float&quot;,&quot;default&quot;:0.55,&quot;min&quot;:0.15,&quot;max&quot;:0.8,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;},&quot;showChefCredit&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { navOpen: false, location: 'Whitefish, Montana', date: '', time: '7:00 PM', people: '2 guests' };
+    this.rootRef = React.createRef();
+    this.overlayRef = React.createRef();
+    this.railRef = React.createRef();
+    this.ticketBoxRef = React.createRef();
+    this.ticketInnerRef = React.createRef();
+    this._observer = null;
+    this._layout = this._layout.bind(this);
+  }
+
+  componentDidMount() {
+    this.applyTweaks();
+    this._layout();
+    this.fixWidows();
+    window.addEventListener('resize', this._layout);
+    // ticket renders async (bundle load) — re-fit shortly after
+    this._t1 = setTimeout(this._layout, 350);
+    this._t2 = setTimeout(this._layout, 1200);
+    this._initParallax();
+    this._initReveals();
+  }
+
+  // Reliable scroll reveals: fade every [data-reveal] from 0 -> 100% opacity
+  // when it enters the viewport. Honors data-reveal-delay and reduced-motion.
+  _initReveals() {
+    const root = this.rootRef.current;
+    if (!root) return;
+    const els = Array.from(root.querySelectorAll('[data-reveal]'));
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || !('IntersectionObserver' in window)) {
+      els.forEach(el => el.classList.add('is-revealed'));
+      return;
+    }
+    this._observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const delay = parseInt(el.getAttribute('data-reveal-delay') || '0', 10);
+        el.style.transitionDelay = delay + 'ms';
+        el.classList.add('is-revealed');
+        obs.unobserve(el); // animate once
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    els.forEach(el => this._observer.observe(el));
+    // Safety: reveal anything already in view on load
+    requestAnimationFrame(() => {
+      els.forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) el.classList.add('is-revealed');
+      });
+    });
+  }
+
+  _initParallax() {
+    const root = this.rootRef.current;
+    if (!root) return;
+    this._reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    this._hero = root.querySelector('.hero-parallax');
+    this._agave = root.querySelector('.agave-parallax');
+    this._onScroll = () => {
+      // Apply immediately (reliable even when rAF is throttled), and also
+      // schedule a rAF pass to coalesce rapid scroll bursts smoothly.
+      this._applyParallax();
+      if (this._raf) return;
+      this._raf = requestAnimationFrame(() => { this._raf = null; this._applyParallax(); });
+    };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    window.addEventListener('resize', this._onScroll, { passive: true });
+    if (this._reduce.addEventListener) this._reduce.addEventListener('change', this._onScroll);
+    this._applyParallax();
+  }
+
+  _applyParallax() {
+    // Reduced motion: no scroll-linked transforms.
+    if (this._reduce && this._reduce.matches) {
+      if (this._hero) this._hero.style.transform = '';
+      if (this._agave) this._agave.style.transform = '';
+      return;
+    }
+    const vh = window.innerHeight || 1;
+    // Hero: ~40% amplified drift + scale over the first viewport of scroll.
+    if (this._hero) {
+      const p = Math.min(1, Math.max(0, window.scrollY / vh));
+      const ty = -34 + p * 68;        // -34px -> +34px
+      const sc = 1.03 + p * 0.05;     // 1.03 -> 1.08
+      this._hero.style.transform = 'translateY(' + ty.toFixed(2) + 'px) scale(' + sc.toFixed(3) + ')';
+    }
+    // Agave: ~40% amplified counter-drift as it passes through the viewport.
+    if (this._agave) {
+      const r = this._agave.getBoundingClientRect();
+      const q = Math.min(1, Math.max(0, (r.top + r.height / 2) / vh));
+      const ty = 44 - q * 88;         // +44px -> -44px (more vertical travel)
+      const rot = 1.6 - q * 3.2;      // +1.6deg -> -1.6deg
+      const sc = 1.02 + (1 - q) * 0.05; // 1.02 -> 1.07
+      this._agave.style.transform = 'translateY(' + ty.toFixed(2) + 'px) rotate(' + rot.toFixed(2) + 'deg) scale(' + sc.toFixed(3) + ')';
+    }
+    this._updateNavActive();
+  }
+
+  // Highlight the rail link whose section is currently most visible.
+  _updateNavActive() {
+    const root = this.rootRef.current; if (!root) return;
+    const vh = window.innerHeight;
+    const sections = [
+      { key: 'reserve', el: root.querySelector('#reserve') },
+      { key: 'story',   el: root.querySelector('#story') },
+      { key: 'hero',    el: root.querySelector('[data-screen-label="Hero"]') },
+    ];
+    // Find the deepest section whose top is above 40% of viewport
+    let active = 'hero';
+    for (const { key, el } of sections) {
+      if (el && el.getBoundingClientRect().top <= vh * 0.4) { active = key; break; }
+    }
+    root.querySelectorAll('a[data-section-link]').forEach((a) => {
+      if (a.dataset.sectionLink === active) {
+        a.setAttribute('data-nav-active', '');
+      } else {
+        a.removeAttribute('data-nav-active');
+      }
+    });
+  }
+
+  // Close nav overlay then smoothly scroll to target section.
+  _doNavClose(anchor) {    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const holdMs = reduced ? 0 : 200; // visible confirmation before closing
+    const closeMs = reduced ? 0 : 280; // wait for close animation before scrolling
+    setTimeout(() => {
+      this.setState({ navOpen: false });
+      setTimeout(() => {
+        const root = this.rootRef.current;
+        const el = root ? root.querySelector(anchor) : document.querySelector(anchor);
+        if (!el) return;
+        const top = el.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo({ top, behavior: reduced ? 'auto' : 'smooth' });
+      }, closeMs);
+    }, holdMs);
+  }
+
+  componentDidUpdate() { this.applyTweaks(); this._layout(); this.fixWidows(); }
+
+  // Design rule: no single-word widows — bind the last two words of every
+  // paragraph with a non-breaking space so they never split, at any width.
+  // Idempotent: re-derives from a cached original each run.
+  fixWidows() {
+    const root = this.rootRef.current;
+    if (!root) return;
+    root.querySelectorAll('p').forEach((p) => {
+      if (p.children.length) return; // only plain-text paragraphs
+      if (p.dataset.widowOrig === undefined) p.dataset.widowOrig = p.textContent;
+      const t = p.dataset.widowOrig.replace(/\s+$/, '');
+      const idx = t.lastIndexOf(' ');
+      p.textContent = idx > -1 ? t.slice(0, idx) + '\u00A0' + t.slice(idx + 1) : t;
+    });
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this._layout);
+    window.removeEventListener('scroll', this._onScroll);
+    window.removeEventListener('resize', this._onScroll);
+    if (this._reduce && this._reduce.removeEventListener) this._reduce.removeEventListener('change', this._onScroll);
+    if (this._raf) cancelAnimationFrame(this._raf);
+    if (this._observer) this._observer.disconnect();
+    clearTimeout(this._t1); clearTimeout(this._t2);
+  }
+
+  applyTweaks() {
+    const accent = this.props.accent || '#658299';
+    if (this.rootRef.current) this.rootRef.current.style.setProperty('--accent', accent);
+    const ov = this.props.heroOverlay;
+    if (this.overlayRef.current && typeof ov === 'number') this.overlayRef.current.style.opacity = String(ov);
+  }
+
+  _layout() {
+    // responsive vertical rail
+    if (this.railRef.current) {
+      this.railRef.current.style.display = window.innerWidth < 960 ? 'none' : 'flex';
+    }
+    // scale the fixed-width FIND A TABLE ticket to its container
+    const box = this.ticketBoxRef.current, inner = this.ticketInnerRef.current;
+    if (box && inner) {
+      const s = Math.min(1, box.clientWidth / 593.331);
+      inner.style.transform = 'scale(' + s + ')';
+      box.style.height = (141.725 * s) + 'px';
+    }
+  }
+
+  renderVals() {
+    return {
+      rootRef: this.rootRef,
+      overlayRef: this.overlayRef,
+      railRef: this.railRef,
+      ticketBoxRef: this.ticketBoxRef,
+      ticketInnerRef: this.ticketInnerRef,
+      navOpen: this.state.navOpen,
+      navOpenAttr: this.state.navOpen ? 'true' : 'false',
+      navHiddenAttr: this.state.navOpen ? 'false' : 'true',
+      toggleNav: () => this.setState(s => ({ navOpen: !s.navOpen })),
+      navClickStory: (e) => { e.preventDefault(); this._doNavClose('#story'); },
+      navClickReserve: (e) => { e.preventDefault(); this._doNavClose('#reserve'); },
+      showChef: this.props.showChefCredit !== false,
+      setLocation: (e) => this.setState({ location: e.target.value }),
+      setDate: (e) => this.setState({ date: e.target.value }),
+      setTime: (e) => this.setState({ time: e.target.value }),
+      setPeople: (e) => this.setState({ people: e.target.value }),
+    };
+  }
+}
+</script>
+</body>
+</html>
